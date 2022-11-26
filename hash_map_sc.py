@@ -281,7 +281,8 @@ class HashMap:
 
 def find_mode(da: DynamicArray) -> (DynamicArray, int):
     """
-    TODO: Write this implementation
+    Takes a DynamicArray and returns a tuple consisting of the mode of the given
+    DynamicArray (as a new DynamicArray) and the frequency of the mode.
     """
 
     length = da.length()
