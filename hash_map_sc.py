@@ -185,13 +185,18 @@ class HashMap:
         index = hash % self._capacity
         bucket = self._buckets[index]
 
-        if bucket.length() > 0:
-            iterator = bucket.__iter__()
-            while iterator is not None:
-                node = iterator.__next__()
-                if node.key == key:
-                    val = node.value
-                    return val
+        # if bucket.length() > 0:
+        #     iterator = bucket.__iter__()
+        #     while iterator is not None:
+        #         node = iterator.__next__()
+        #         if node.key == key:
+        #             val = node.value
+        #             return val
+
+        for node in bucket:
+            if node.key == key:
+                val = node.value
+                return val
 
         return val
 
