@@ -105,7 +105,7 @@ class HashMap:
         bucket = self._buckets[index]
         matching_key = bucket.contains(key)
 
-        if matching_key is not None:
+        if matching_key:
             matching_key.value = value
         else:
             bucket.insert(key, value)
@@ -155,14 +155,19 @@ class HashMap:
         if not self._is_prime(new_capacity):
             new_capacity = self._next_prime(new_capacity)
 
-        new_map = HashMap(new_capacity)
+        function = self._hash_function
+
+        new_map = HashMap(new_capacity, function)
 
         for x in range(self._capacity):
-            if self._buckets[x].length() > 0:
-                iterator = self._buckets[x].__iter__()
-                for y in range(self._buckets[x].length()):
-                    node = iterator.__next__()
-                    new_map.put(node.key, node.value)
+            # if self._buckets[x].length() > 0:
+            #     iterator = self._buckets[x].__iter__()
+            #     for y in range(self._buckets[x].length()):
+            #         node = iterator.__next__()
+            #         new_map.put(node.key, node.value)
+            bucket = self._buckets[x]
+            for node in bucket:
+                new_map.put(node.key, node.value)
 
         self._buckets = new_map._buckets
         self._size = new_map._size
@@ -203,18 +208,22 @@ class HashMap:
         if self._capacity == 0 or self._size == 0:
             return False
 
-        if bucket.length == 0:
-            return False
-        elif bucket.length() > 0:
-            iterator = bucket.__iter__()
-            node = iterator.__next__()
-            while node:
-                if node.key == key:
-                    return True
-                try:
-                    node = iterator.__next__()
-                except StopIteration:
-                    return False
+        # if bucket.length == 0:
+        #     return False
+        # elif bucket.length() > 0:
+        #     iterator = bucket.__iter__()
+        #     node = iterator.__next__()
+        #     while node:
+        #         if node.key == key:
+        #             return True
+        #         try:
+        #             node = iterator.__next__()
+        #         except StopIteration:
+        #             return False
+
+        for node in bucket:
+            if node.key == key:
+                return True
 
         return False
 
@@ -228,7 +237,7 @@ class HashMap:
         index = hash % self._capacity
         bucket = self._buckets[index]
 
-        if self._capacity == 0 or self._size ==0:
+        if self._capacity == 0 or self._size == 0:
             return
 
         if bucket.length == 0:
@@ -277,7 +286,8 @@ def find_mode(da: DynamicArray) -> (DynamicArray, int):
 # ------------------- BASIC TESTING ---------------------------------------- #
 
 if __name__ == "__main__":
-    # #
+    pass
+    #
     # print("\nPDF - put example 1")
     # print("-------------------")
     # m = HashMap(53, hash_function_1)
@@ -288,6 +298,8 @@ if __name__ == "__main__":
 
     # cases = [("apple", "red"), ("banana", "yellow"), ("orange", "orange"), ("blueberry", "blue"),
     #          ("raspberry", "red"), ("grape", "purple")]
+
+    # cases = [[i for i in range(1, 101)], [x for x in range(5, 306, 5)]]
     #
     # print("\nCustom example 1")
     # print("-------------------")
@@ -298,6 +310,17 @@ if __name__ == "__main__":
     #
     # print(m)
 
+    # print("\nCustom - put example 2")
+    # print("-------------------")
+    # m = HashMap(3, hash_function_1)
+    # words = ['wer', 'sdfeww', 'ghtee', 'wwefwg', 'awefdgh', 'erteb', 'qpqpwkr', 'wef', 'ngfbvds', 'ergerg']
+    # for i in range(15):
+    #     for word in words:
+    #         m.put(word + str(i), i * 13)
+    #         # if i % 25 == 24:
+    #         #     print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
+    #         if i % 5 == 0:
+    #             print(m)
     # m = HashMap(53, hash_function_1)
     # m.put("apple", "red")
     # m.put("banana", "yellow")
@@ -378,7 +401,7 @@ if __name__ == "__main__":
     # print(m.get_size(), m.get_capacity())
     # m.clear()
     # print(m.get_size(), m.get_capacity())
-
+    #
     print("\nPDF - resize example 1")
     print("----------------------")
     m = HashMap(23, hash_function_1)
