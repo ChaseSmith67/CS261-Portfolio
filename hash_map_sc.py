@@ -94,11 +94,6 @@ class HashMap:
         table, the existing value will be replaced with the new one.
         """
 
-        load_factor = self.table_load()
-
-        if load_factor >= 1.0:
-            self.resize_table(self._capacity * 2)
-
         hash = self._hash_function(key)
         index = hash % self._capacity
 
@@ -110,6 +105,11 @@ class HashMap:
         else:
             bucket.insert(key, value)
             self._size += 1
+
+        load_factor = self.table_load()
+
+        if load_factor >= 1.0:
+            self.resize_table(self._capacity * 2)
 
     def empty_buckets(self) -> int:
         """
