@@ -210,6 +210,8 @@ class HashMap:
         for x in range(self._capacity):
             self._buckets[x] = None
 
+        self._size = 0
+
     def get_keys_and_values(self) -> DynamicArray:
         """
         TODO: Write this implementation
