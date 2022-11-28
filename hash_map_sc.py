@@ -91,7 +91,8 @@ class HashMap:
     def put(self, key: str, value: object) -> None:
         """
         Adds the given key/value pair to the HashMap. If the key already exists in the
-        table, the existing value will be replaced with the new one.
+        table, the existing value will be replaced with the new one. Uses separate
+        chaining to handle collisions.
         """
 
         load_factor = self.table_load()
@@ -146,7 +147,8 @@ class HashMap:
     def resize_table(self, new_capacity: int) -> None:
         """
         Changes the size of the table to the given new_capacity. If the value specified is
-        not a prime number, the table will be resized to the next prime number.
+        not a prime number, the table will be resized to the next prime number. All existing
+        entries in the HashMap will be rehashed and added to the new table.
         """
 
         if new_capacity < 1:
