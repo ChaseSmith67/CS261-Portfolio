@@ -92,29 +92,40 @@ class HashMap:
         with quadratic probing to handle collisions.
         """
 
+        # Calculate load factor and resize if >= 0.5
         load_factor = self.table_load()
-
         if load_factor >= 0.5:
             self.resize_table(self._capacity * 2)
 
-        array = self._buckets
-        length = self._capacity
+        # Assign variables for readability
+        array, length = self._buckets, self._capacity
+
+        # Create new HashEntry with supplied key/value
         kv_pair = HashEntry(key, value)
 
+        # Use hash function to determine appropriate index
         hash = self._hash_function(key)
         i = hash % length
         j = 0
         index = i + (j ** 2)
 
         while array[index] is not None:
+            # Replace tombstone or matching key, if found
+            # TODO: Incorporate contains(), should replace matching key, rather than
+            # TODO: tombstone, if one exists
             if array[index].is_tombstone or array[index].key == key:
                 array[index] = kv_pair
-            j += 1
+                return
 
+            # Increment and calculate next index
+            j += 1
             index = i + (j ** 2)
+
+            # Prevent index error by starting over at beginning of array
             if index >= length:
                 index -= length
 
+        # Insert new HashEntry at empty index and update size
         array[index] = kv_pair
         self._size += 1
 
@@ -134,6 +145,7 @@ class HashMap:
 
         count = 0
 
+        # TODO: Incorporate iter() function, when built
         for x in range(self._capacity):
             if not self._buckets[x]:
                 count += 1
@@ -147,9 +159,11 @@ class HashMap:
         entries in the HashMap will be rehashed and added to the new table.
         """
 
+        # Validate specified capacity
         if new_capacity < 1 or new_capacity < self._size:
             return
 
+        # Ensure new capacity is a prime number, update if not
         if not self._is_prime(new_capacity):
             new_capacity = self._next_prime(new_capacity)
 
@@ -157,6 +171,7 @@ class HashMap:
 
         new_map = HashMap(new_capacity, function)
 
+        # TODO: Incorporate iter() function, when built
         for x in range(self._capacity):
             old_hash_entry = self._buckets[x]
             if old_hash_entry and not old_hash_entry.is_tombstone:
@@ -164,6 +179,7 @@ class HashMap:
                 value = old_hash_entry.value
                 new_map.put(key, value)
 
+        # Set data members all to new hashmap
         self._buckets = new_map._buckets
         self._size = new_map._size
         self._capacity = new_map._capacity
@@ -226,13 +242,13 @@ if __name__ == "__main__":
         # if i % 25 == 24:
         #     print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
 
-    print("\nPDF - put example 1")
-    print("-------------------")
-    m = HashMap(53, hash_function_1)
-    for i in range(150):
-        m.put('str' + str(i), i * 100)
-        if i % 25 == 24:
-            print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
+    # print("\nPDF - put example 1")
+    # print("-------------------")
+    # m = HashMap(53, hash_function_1)
+    # for i in range(150):
+    #     m.put('str' + str(i), i * 100)
+    #     if i % 25 == 24:
+    #         print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
     #
     print("\nPDF - put example 2")
     print("-------------------")
