@@ -116,14 +116,12 @@ class HashMap:
             # Replace matching key, if one exists
             if matching_key:
                 if array[index].key == key:
-                    if array[index].is_tombstone:
-                        print("this happened")
-                        self._size += 1
                     array[index] = kv_pair
                     return
             # Replace tombstone, if one is encountered
             if array[index].is_tombstone:
                 array[index] = kv_pair
+                self._size += 1
                 return
 
             # Increment and calculate next index
@@ -444,30 +442,30 @@ if __name__ == "__main__":
         m.put(str(key), key * 42)
     print(m.get_size(), m.get_capacity())
 
-    sizes = [i for i in range(2, 100)]
-    for size in sizes:
-        m.resize_table(size)
-        print(m.get_size(), m.get_capacity())
-    # for capacity in range(2, 1000, 117):
-    #     m.resize_table(capacity)
-    #
-    #     if m.table_load() > 0.5:
-    #         print(f"Check that the load factor is acceptable after the call to resize_table().\n"
-    #               f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
-    #
-    #     m.put('some key', 'some value')
-    #     result = m.contains_key('some key')
-    #     m.remove('some key')
-    #     #m.put('some key', 'some value')
-    #     #m.put('some key', 'some other value')
-    #     #print(m)
-    #
-    #     for key in keys:
-    #         # all inserted keys must be present
-    #         result &= m.contains_key(str(key))
-    #         # NOT inserted keys must be absent
-    #         result &= not m.contains_key(str(key + 1))
-    #     print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
+    # sizes = [i for i in range(2, 100)]
+    # for size in sizes:
+    #     m.resize_table(size)
+    #     print(m.get_size(), m.get_capacity())
+    for capacity in range(2, 1000, 117):
+        m.resize_table(capacity)
+
+        if m.table_load() > 0.5:
+            print(f"Check that the load factor is acceptable after the call to resize_table().\n"
+                  f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
+
+        m.put('some key', 'some value')
+        result = m.contains_key('some key')
+        m.remove('some key')
+        m.put('some key', 'some value')
+        #m.put('some key', 'some other value')
+        #print(m)
+
+        for key in keys:
+            # all inserted keys must be present
+            result &= m.contains_key(str(key))
+            # NOT inserted keys must be absent
+            result &= not m.contains_key(str(key + 1))
+        print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
 
     # print("\nPDF - get example 1")
     # print("-------------------")
