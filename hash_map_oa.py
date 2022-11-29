@@ -298,9 +298,26 @@ class HashMap:
 
     def get_keys_and_values(self) -> DynamicArray:
         """
-        TODO: Write this implementation
+        Returns a DynamicArray consisting of tuples of all the key/value pairs contained
+        in the HashMap. If the HashMap is empty, will return an empty DynamicArray.
         """
-        pass
+
+        kv_array = DynamicArray()
+
+        # Table is empty
+        if self._size == 0:
+            return kv_array
+
+        array, length = self._buckets, self._capacity
+
+        for x in range(length):
+            if not array[x] or array[x].is_tombstone:
+                continue
+            key, value = array[x].key, array[x].value
+            kv_pair = key, value
+            kv_array.append(kv_pair)
+
+        return kv_array
 
     def __iter__(self):
         """
@@ -310,18 +327,27 @@ class HashMap:
         # Used to move through the HashMap's entries.
         self._index = 0
 
+        val = self._buckets[self._index]
+        # Skip over None and tombstone values
+        while not val or val.is_tombstone:
+            self._index += 1
+            val = self._buckets[self._index]
+
         return self
 
     def __next__(self):
         """
-        Returns next value in the HashMap and advances the iterator.
+        Returns next value in the HashMap and advances the iterator. Skips over
+        None values and tombstones.
         """
 
         try:
             val = self._buckets[self._index]
+            # Skip over None and tombstone values
             while not val or val.is_tombstone:
                 self._index += 1
                 val = self._buckets[self._index]
+
         except DynamicArrayException:
             raise StopIteration
 
@@ -512,37 +538,37 @@ if __name__ == "__main__":
     # m.clear()
     # print(m.get_size(), m.get_capacity())
     #
-    # print("\nPDF - get_keys_and_values example 1")
-    # print("------------------------")
-    # m = HashMap(11, hash_function_2)
-    # for i in range(1, 6):
-    #     m.put(str(i), str(i * 10))
-    # print(m.get_keys_and_values())
-    #
-    # m.resize_table(2)
-    # print(m.get_keys_and_values())
-    #
-    # m.put('20', '200')
-    # m.remove('1')
-    # m.resize_table(12)
-    # print(m.get_keys_and_values())
-    #
-    print("\nPDF - __iter__(), __next__() example 1")
-    print("---------------------")
-    m = HashMap(10, hash_function_1)
-    for i in range(5):
+    print("\nPDF - get_keys_and_values example 1")
+    print("------------------------")
+    m = HashMap(11, hash_function_2)
+    for i in range(1, 6):
         m.put(str(i), str(i * 10))
-    print(m)
-    for item in m:
-        print('K:', item.key, 'V:', item.value)
+    print(m.get_keys_and_values())
 
-    print("\nPDF - __iter__(), __next__() example 2")
-    print("---------------------")
-    m = HashMap(10, hash_function_2)
-    for i in range(5):
-        m.put(str(i), str(i * 24))
-    m.remove('0')
-    m.remove('4')
-    print(m)
-    for item in m:
-        print('K:', item.key, 'V:', item.value)
+    m.resize_table(2)
+    print(m.get_keys_and_values())
+
+    m.put('20', '200')
+    m.remove('1')
+    m.resize_table(12)
+    print(m.get_keys_and_values())
+    #
+    # print("\nPDF - __iter__(), __next__() example 1")
+    # print("---------------------")
+    # m = HashMap(10, hash_function_1)
+    # for i in range(5):
+    #     m.put(str(i), str(i * 10))
+    # print(m)
+    # for item in m:
+    #     print('K:', item.key, 'V:', item.value)
+    #
+    # print("\nPDF - __iter__(), __next__() example 2")
+    # print("---------------------")
+    # m = HashMap(10, hash_function_2)
+    # for i in range(5):
+    #     m.put(str(i), str(i * 24))
+    # m.remove('0')
+    # m.remove('4')
+    # print(m)
+    # for item in m:
+    #     print('K:', item.key, 'V:', item.value)
