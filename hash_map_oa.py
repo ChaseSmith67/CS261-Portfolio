@@ -304,16 +304,30 @@ class HashMap:
 
     def __iter__(self):
         """
-        TODO: Write this implementation
+        Initializes an iterator to traverse through the HashMap.
         """
-        pass
+
+        # Used to move through the HashMap's entries.
+        self._index = 0
+
+        return self
 
     def __next__(self):
         """
-        TODO: Write this implementation
+        Returns next value in the HashMap and advances the iterator.
         """
-        pass
 
+        try:
+            val = self._buckets[self._index]
+            while not val or val.is_tombstone:
+                self._index += 1
+                val = self._buckets[self._index]
+        except DynamicArrayException:
+            raise StopIteration
+
+        self._index += 1
+
+        return val
 
 # ------------------- BASIC TESTING ---------------------------------------- #
 
@@ -464,15 +478,15 @@ if __name__ == "__main__":
     #     result &= not m.contains_key(str(key + 1))
     # print(result)
     #
-    print("\nPDF - remove example 1")
-    print("----------------------")
-    m = HashMap(53, hash_function_1)
-    print(m.get('key1'))
-    m.put('key1', 10)
-    print(m.get('key1'))
-    m.remove('key1')
-    print(m.get('key1'))
-    m.remove('key4')
+    # print("\nPDF - remove example 1")
+    # print("----------------------")
+    # m = HashMap(53, hash_function_1)
+    # print(m.get('key1'))
+    # m.put('key1', 10)
+    # print(m.get('key1'))
+    # m.remove('key1')
+    # print(m.get('key1'))
+    # m.remove('key4')
     #
     # print("\nPDF - clear example 1")
     # print("---------------------")
@@ -513,22 +527,22 @@ if __name__ == "__main__":
     # m.resize_table(12)
     # print(m.get_keys_and_values())
     #
-    # print("\nPDF - __iter__(), __next__() example 1")
-    # print("---------------------")
-    # m = HashMap(10, hash_function_1)
-    # for i in range(5):
-    #     m.put(str(i), str(i * 10))
-    # print(m)
-    # for item in m:
-    #     print('K:', item.key, 'V:', item.value)
-    #
-    # print("\nPDF - __iter__(), __next__() example 2")
-    # print("---------------------")
-    # m = HashMap(10, hash_function_2)
-    # for i in range(5):
-    #     m.put(str(i), str(i * 24))
-    # m.remove('0')
-    # m.remove('4')
-    # print(m)
-    # for item in m:
-    #     print('K:', item.key, 'V:', item.value)
+    print("\nPDF - __iter__(), __next__() example 1")
+    print("---------------------")
+    m = HashMap(10, hash_function_1)
+    for i in range(5):
+        m.put(str(i), str(i * 10))
+    print(m)
+    for item in m:
+        print('K:', item.key, 'V:', item.value)
+
+    print("\nPDF - __iter__(), __next__() example 2")
+    print("---------------------")
+    m = HashMap(10, hash_function_2)
+    for i in range(5):
+        m.put(str(i), str(i * 24))
+    m.remove('0')
+    m.remove('4')
+    print(m)
+    for item in m:
+        print('K:', item.key, 'V:', item.value)
