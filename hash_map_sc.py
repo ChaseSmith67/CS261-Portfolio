@@ -1,9 +1,10 @@
-# Name:
-# OSU Email:
+# Name: Chase Smith
+# OSU Email: smitcha6@oregonstate.edu
 # Course: CS261 - Data Structures
-# Assignment:
-# Due Date:
-# Description:
+# Assignment: 6 - HashMap
+# Due Date: 12//02/2022
+# Description: Implementation of a HashMap using separate chaining
+#               to handle collisions
 
 
 from a6_include import (DynamicArray, LinkedList,
