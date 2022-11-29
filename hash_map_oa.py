@@ -189,7 +189,7 @@ class HashMap:
 
         # Set data members all to new hashmap
         self._buckets = new_map._buckets
-        # self._size = new_map._size
+        self._size = new_map._size
         self._capacity = new_map._capacity
 
     def get(self, key: str) -> object:
