@@ -116,6 +116,8 @@ class HashMap:
             # Replace matching key, if one exists
             if matching_key:
                 if array[index].key == key:
+                    if array[index].is_tombstone:
+                        self._size += 1
                     array[index] = kv_pair
                     return
             # Replace tombstone, if one is encountered
