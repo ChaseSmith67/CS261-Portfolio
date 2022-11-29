@@ -99,7 +99,7 @@ class HashMap:
         load_factor = self.table_load()
 
         if load_factor >= 1.0:
-            self.resize_table(self._capacity * 2)
+            self.resize_table(self._next_prime(self._capacity * 2))
 
         hash = self._hash_function(key)
         index = hash % self._capacity
@@ -156,7 +156,7 @@ class HashMap:
             return
 
         if not self._is_prime(new_capacity):
-            self.resize_table(self._next_prime(new_capacity))
+            new_capacity = self._next_prime(new_capacity)
 
         function = self._hash_function
 
@@ -468,7 +468,8 @@ if __name__ == "__main__":
     #
     print("\ncustom - resize example 2")
     print("----------------------")
-    m = HashMap(5, hash_function_2)
+    m = HashMap(6, hash_function_2)
+    print(m.get_capacity())
     keys = [i for i in range(1, 1000, 13)]
     for key in keys:
         m.put(str(key), key * 42)
