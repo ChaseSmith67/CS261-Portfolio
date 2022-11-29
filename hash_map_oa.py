@@ -107,10 +107,7 @@ class HashMap:
         hash = self._hash_function(key)
         i = hash % length
         j = 0
-        index = i + (j ** 2)
-
-        if index >= length:
-            index -= length
+        index = (i + (j ** 2)) % length
 
         matching_key = self.contains_key(key)
 
@@ -127,11 +124,7 @@ class HashMap:
 
             # Increment and calculate next index
             j += 1
-            index = i + (j ** 2)
-
-            # Prevent index error by starting over at beginning of array
-            if index >= length:
-                index -= length
+            index = (i + (j ** 2)) % length
 
         # Insert new HashEntry at empty index and update size
         array[index] = kv_pair
@@ -206,10 +199,7 @@ class HashMap:
         hash = self._hash_function(key)
         i = hash % length
         j = 0
-        index = i + (j ** 2)
-
-        if index >= length:
-            index -= length
+        index = (i + (j ** 2)) % length
 
         while array[index] is not None:
             if array[index].key == key and not array[index].is_tombstone:
@@ -218,11 +208,7 @@ class HashMap:
 
             # Increment and calculate next index
             j += 1
-            index = i + (j ** 2)
-
-            # Prevent index error by starting over at beginning of array
-            if index >= length:
-                index -= length
+            index = (i + (j ** 2)) % length
 
         # Key not found in table
         return val
@@ -242,10 +228,7 @@ class HashMap:
         hash = self._hash_function(key)
         i = hash % length
         j = 0
-        index = i + (j ** 2)
-
-        if index >= length:
-            index -= length
+        index = (i + (j ** 2)) % length
 
         while array[index] is not None:
             # Key found and is not tombstone
@@ -254,11 +237,7 @@ class HashMap:
 
             # Increment and calculate next index
             j += 1
-            index = i + (j ** 2)
-
-            # Prevent index error by starting over at beginning of array
-            if index >= length:
-                index -= length
+            index = (i + (j ** 2)) % length
 
         # Key not found in table
         return False
@@ -280,7 +259,7 @@ class HashMap:
         hash = self._hash_function(key)
         i = hash % length
         j = 0
-        index = i + (j ** 2)
+        index = (i + (j ** 2)) % length
 
         while array[index] is not None:
             # Key found and is not tombstone
@@ -291,11 +270,7 @@ class HashMap:
 
             # Increment and calculate next index
             j += 1
-            index = i + (j ** 2)
-
-            # Prevent index error by starting over at beginning of array
-            if index >= length:
-                index -= length
+            index = (i + (j ** 2)) % length
 
         # Key not found in table
         return
@@ -438,39 +413,50 @@ if __name__ == "__main__":
     #     if i % 30 == 0:
     #         print(m.empty_buckets(), m.get_size(), m.get_capacity())
 
-    print("\nPDF - resize example 1")
-    print("----------------------")
-    m = HashMap(23, hash_function_1)
-    m.put('key1', 10)
-    print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
-    m.resize_table(30)
-    print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
-
-    print("\nPDF - resize example 2")
-    print("----------------------")
-    m = HashMap(79, hash_function_2)
-    keys = [i for i in range(1, 1000, 13)]
-    for key in keys:
-        m.put(str(key), key * 42)
-    print(m.get_size(), m.get_capacity())
-
-    for capacity in range(111, 1000, 117):
-        m.resize_table(capacity)
-
-        if m.table_load() > 0.5:
-            print(f"Check that the load factor is acceptable after the call to resize_table().\n"
-                  f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
-
-        m.put('some key', 'some value')
-        result = m.contains_key('some key')
-        m.remove('some key')
-
-        for key in keys:
-            # all inserted keys must be present
-            result &= m.contains_key(str(key))
-            # NOT inserted keys must be absent
-            result &= not m.contains_key(str(key + 1))
-        print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
+    print("\nCustom - empty_buckets example 3")
+    print("-----------------------------")
+    m = HashMap(53, hash_function_1)
+    for i in range(1000, 1501):
+        print(i)
+        if i == 1317:
+            print("wtf?")
+        m.put('key' + str(i), i * 100)
+        if i % 1 == 0:
+            print(m.empty_buckets(), m.get_size(), m.get_capacity())
+    #
+    # print("\nPDF - resize example 1")
+    # print("----------------------")
+    # m = HashMap(23, hash_function_1)
+    # m.put('key1', 10)
+    # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
+    # m.resize_table(30)
+    # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
+    #
+    # print("\nPDF - resize example 2")
+    # print("----------------------")
+    # m = HashMap(79, hash_function_2)
+    # keys = [i for i in range(1, 1000, 13)]
+    # for key in keys:
+    #     m.put(str(key), key * 42)
+    # print(m.get_size(), m.get_capacity())
+    #
+    # for capacity in range(111, 1000, 117):
+    #     m.resize_table(capacity)
+    #
+    #     if m.table_load() > 0.5:
+    #         print(f"Check that the load factor is acceptable after the call to resize_table().\n"
+    #               f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
+    #
+    #     m.put('some key', 'some value')
+    #     result = m.contains_key('some key')
+    #     m.remove('some key')
+    #
+    #     for key in keys:
+    #         # all inserted keys must be present
+    #         result &= m.contains_key(str(key))
+    #         # NOT inserted keys must be absent
+    #         result &= not m.contains_key(str(key + 1))
+    #     print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
 
     # print("\nPDF - get example 1")
     # print("-------------------")
