@@ -109,11 +109,19 @@ class HashMap:
         j = 0
         index = i + (j ** 2)
 
+        if index >= length:
+            index -= length
+
+        matching_key = self.contains_key(key)
+
         while array[index] is not None:
-            # Replace tombstone or matching key, if found
-            # TODO: Incorporate contains(), should replace matching key, rather than
-            # TODO: tombstone, if one exists
-            if array[index].is_tombstone or array[index].key == key:
+            # Replace matching key, if one exists
+            if matching_key:
+                if array[index].key == key:
+                    array[index] = kv_pair
+                    return
+            # Replace tombstone, if one is encountered
+            if array[index].is_tombstone:
                 array[index] = kv_pair
                 return
 
@@ -181,7 +189,7 @@ class HashMap:
 
         # Set data members all to new hashmap
         self._buckets = new_map._buckets
-        self._size = new_map._size
+        # self._size = new_map._size
         self._capacity = new_map._capacity
 
     def get(self, key: str) -> object:
@@ -199,6 +207,9 @@ class HashMap:
         i = hash % length
         j = 0
         index = i + (j ** 2)
+
+        if index >= length:
+            index -= length
 
         while array[index] is not None:
             if array[index].key == key and not array[index].is_tombstone:
@@ -232,6 +243,9 @@ class HashMap:
         i = hash % length
         j = 0
         index = i + (j ** 2)
+
+        if index >= length:
+            index -= length
 
         while array[index] is not None:
             # Key found and is not tombstone
@@ -367,11 +381,11 @@ if __name__ == "__main__":
     #     print(m)
         # if i % 25 == 24:
         #     print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
-
+    #
     # print("\nPDF - put example 1")
     # print("-------------------")
     # m = HashMap(53, hash_function_1)
-    # for i in range(150):
+    # for i in range(1500):
     #     m.put('str' + str(i), i * 100)
     #     if i % 25 == 24:
     #         print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
@@ -424,39 +438,39 @@ if __name__ == "__main__":
     #     if i % 30 == 0:
     #         print(m.empty_buckets(), m.get_size(), m.get_capacity())
 
-    # print("\nPDF - resize example 1")
-    # print("----------------------")
-    # m = HashMap(23, hash_function_1)
-    # m.put('key1', 10)
-    # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
-    # m.resize_table(30)
-    # print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
-    #
-    # print("\nPDF - resize example 2")
-    # print("----------------------")
-    # m = HashMap(79, hash_function_2)
-    # keys = [i for i in range(1, 1000, 13)]
-    # for key in keys:
-    #     m.put(str(key), key * 42)
-    # print(m.get_size(), m.get_capacity())
-    #
-    # for capacity in range(111, 1000, 117):
-    #     m.resize_table(capacity)
-    #
-    #     if m.table_load() > 0.5:
-    #         print(f"Check that the load factor is acceptable after the call to resize_table().\n"
-    #               f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
-    #
-    #     m.put('some key', 'some value')
-    #     result = m.contains_key('some key')
-    #     m.remove('some key')
-    #
-    #     for key in keys:
-    #         # all inserted keys must be present
-    #         result &= m.contains_key(str(key))
-    #         # NOT inserted keys must be absent
-    #         result &= not m.contains_key(str(key + 1))
-    #     print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
+    print("\nPDF - resize example 1")
+    print("----------------------")
+    m = HashMap(23, hash_function_1)
+    m.put('key1', 10)
+    print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
+    m.resize_table(30)
+    print(m.get_size(), m.get_capacity(), m.get('key1'), m.contains_key('key1'))
+
+    print("\nPDF - resize example 2")
+    print("----------------------")
+    m = HashMap(79, hash_function_2)
+    keys = [i for i in range(1, 1000, 13)]
+    for key in keys:
+        m.put(str(key), key * 42)
+    print(m.get_size(), m.get_capacity())
+
+    for capacity in range(111, 1000, 117):
+        m.resize_table(capacity)
+
+        if m.table_load() > 0.5:
+            print(f"Check that the load factor is acceptable after the call to resize_table().\n"
+                  f"Your load factor is {round(m.table_load(), 2)} and should be less than or equal to 0.5")
+
+        m.put('some key', 'some value')
+        result = m.contains_key('some key')
+        m.remove('some key')
+
+        for key in keys:
+            # all inserted keys must be present
+            result &= m.contains_key(str(key))
+            # NOT inserted keys must be absent
+            result &= not m.contains_key(str(key + 1))
+        print(capacity, result, m.get_size(), m.get_capacity(), round(m.table_load(), 2))
 
     # print("\nPDF - get example 1")
     # print("-------------------")
@@ -537,21 +551,21 @@ if __name__ == "__main__":
     # print(m.get_size(), m.get_capacity())
     # m.clear()
     # print(m.get_size(), m.get_capacity())
+    # #
+    # print("\nPDF - get_keys_and_values example 1")
+    # print("------------------------")
+    # m = HashMap(11, hash_function_2)
+    # for i in range(1, 6):
+    #     m.put(str(i), str(i * 10))
+    # print(m.get_keys_and_values())
     #
-    print("\nPDF - get_keys_and_values example 1")
-    print("------------------------")
-    m = HashMap(11, hash_function_2)
-    for i in range(1, 6):
-        m.put(str(i), str(i * 10))
-    print(m.get_keys_and_values())
-
-    m.resize_table(2)
-    print(m.get_keys_and_values())
-
-    m.put('20', '200')
-    m.remove('1')
-    m.resize_table(12)
-    print(m.get_keys_and_values())
+    # m.resize_table(2)
+    # print(m.get_keys_and_values())
+    #
+    # m.put('20', '200')
+    # m.remove('1')
+    # m.resize_table(12)
+    # print(m.get_keys_and_values())
     #
     # print("\nPDF - __iter__(), __next__() example 1")
     # print("---------------------")
