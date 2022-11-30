@@ -122,6 +122,7 @@ class HashMap:
             if array[index].is_tombstone:
                 array[index] = kv_pair
                 self._size += 1
+                print("this happened")
                 return
 
             # Increment and calculate next index
