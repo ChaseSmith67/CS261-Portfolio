@@ -350,23 +350,23 @@ class HashMap:
 # ------------------- BASIC TESTING ---------------------------------------- #
 
 if __name__ == "__main__":
-
+    #
     # print("\nPDF - put example 1")
     # print("-------------------")
     # m = HashMap(13, hash_function_1)
     # for i in range(25):
     #     m.put('str' + str(i), i * 100)
-    #     print(m)
-        # if i % 25 == 24:
-        #     print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
-    #
-    # print("\nPDF - put example 1")
-    # print("-------------------")
-    # m = HashMap(53, hash_function_1)
-    # for i in range(1500):
-    #     m.put('str' + str(i), i * 100)
+    #    # print(m)
     #     if i % 25 == 24:
     #         print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
+    #
+    print("\nPDF - put example 1")
+    print("-------------------")
+    m = HashMap(53, hash_function_1)
+    for i in range(150):
+        m.put('str' + str(i), i * 100)
+        if i % 25 == 24:
+            print(m.empty_buckets(), round(m.table_load(), 2), m.get_size(), m.get_capacity())
     #
     # print("\nPDF - put example 2")
     # print("-------------------")

@@ -99,7 +99,7 @@ class HashMap:
         load_factor = self.table_load()
 
         if load_factor >= 1.0:
-            self.resize_table(self._next_prime(self._capacity * 2))
+            self.resize_table(self._capacity * 2)
 
         hash = self._hash_function(key)
         index = hash % self._capacity
@@ -152,7 +152,7 @@ class HashMap:
         entries in the HashMap will be rehashed and added to the new table.
         """
 
-        if new_capacity < 1:
+        if new_capacity < 1 or new_capacity < self._capacity:
             return
 
         if not self._is_prime(new_capacity):
@@ -161,13 +161,9 @@ class HashMap:
         function = self._hash_function
 
         new_map = HashMap(new_capacity, function)
+        print(new_map._capacity)
 
         for x in range(self._capacity):
-            # if self._buckets[x].length() > 0:
-            #     iterator = self._buckets[x].__iter__()
-            #     for y in range(self._buckets[x].length()):
-            #         node = iterator.__next__()
-            #         new_map.put(node.key, node.value)
             bucket = self._buckets[x]
             for node in bucket:
                 new_map.put(node.key, node.value)
@@ -188,14 +184,6 @@ class HashMap:
         index = hash % self._capacity
         bucket = self._buckets[index]
 
-        # if bucket.length() > 0:
-        #     iterator = bucket.__iter__()
-        #     while iterator is not None:
-        #         node = iterator.__next__()
-        #         if node.key == key:
-        #             val = node.value
-        #             return val
-
         for node in bucket:
             if node.key == key:
                 val = node.value
@@ -215,19 +203,6 @@ class HashMap:
 
         if self._capacity == 0 or self._size == 0:
             return False
-
-        # if bucket.length == 0:
-        #     return False
-        # elif bucket.length() > 0:
-        #     iterator = bucket.__iter__()
-        #     node = iterator.__next__()
-        #     while node:
-        #         if node.key == key:
-        #             return True
-        #         try:
-        #             node = iterator.__next__()
-        #         except StopIteration:
-        #             return False
 
         for node in bucket:
             if node.key == key:
@@ -468,17 +443,19 @@ if __name__ == "__main__":
     #
     print("\ncustom - resize example 2")
     print("----------------------")
-    m = HashMap(6, hash_function_2)
-    print(m.get_capacity())
-    keys = [i for i in range(1, 1000, 13)]
-    for key in keys:
-        m.put(str(key), key * 42)
-    print(m.get_size(), m.get_capacity())
+    m = HashMap(97, hash_function_1)
+    for x in range(61):
+        key = ("keyyy" + str(x))
+        if x % 3 == 0:
+            key += "wtf"
+        if x % 5 == 0:
+            key += "yyz"
+        m.put(key, x * 13)
 
-    sizes = [i for i in range(2, 100)]
-    for size in sizes:
-        m.resize_table(size)
-        print(m.get_size(), m.get_capacity())
+    print(m)
+    m.resize_table(2)
+    print(m)
+
     # print("\nPDF - get example 1")
     # print("-------------------")
     # m = HashMap(31, hash_function_1)
