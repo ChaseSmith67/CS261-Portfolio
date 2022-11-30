@@ -152,7 +152,7 @@ class HashMap:
         entries in the HashMap will be rehashed and added to the new table.
         """
 
-        if new_capacity < 1 or new_capacity < self._capacity:
+        if new_capacity < 1:
             return
 
         if not self._is_prime(new_capacity):
