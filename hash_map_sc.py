@@ -159,9 +159,8 @@ class HashMap:
             new_capacity = self._next_prime(new_capacity)
 
         function = self._hash_function
-
-        new_map = HashMap(new_capacity, function)
-        print(new_map._capacity)
+        new_capacity = self._next_prime(new_capacity)
+        new_map = HashMap(self._next_prime(new_capacity), function)
 
         for x in range(self._capacity):
             bucket = self._buckets[x]
