@@ -122,7 +122,6 @@ class HashMap:
             if array[index].is_tombstone:
                 array[index] = kv_pair
                 self._size += 1
-                print("this happened")
                 return
 
             # Increment and calculate next index
@@ -149,7 +148,6 @@ class HashMap:
 
         count = 0
 
-        # TODO: Incorporate iter() function, when built
         for x in range(self._capacity):
             if not self._buckets[x]:
                 count += 1
@@ -175,7 +173,6 @@ class HashMap:
 
         new_map = HashMap(new_capacity, function)
 
-        # TODO: Incorporate iter() function, when built
         for x in range(self._capacity):
             old_hash_entry = self._buckets[x]
             if old_hash_entry and not old_hash_entry.is_tombstone:
